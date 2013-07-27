@@ -25,14 +25,22 @@
 # only supports basic optionless call to nodeenv for the moment
 mknodeenv(){
 	node_env=$1
-	
+
 	type deactivate_node >/dev/null 2>&1
 
-	if [ $? -eq 0 ]; then	
+	if [ $? -eq 0 ]; then
 		deactivate_node
 	fi
 
-	nodeenv "$NODEENV_HOME$node_env"
+	if [[ -z "$NODEENV_HOME" ]]; then
+		export NODEENV_HOME=~/.nodeenv
+	fi
+
+	if [ ! -d "$NODEENV_HOME" ]; then
+    	mkdir $NODEENV_HOME
+	fi
+
+	nodeenv "$NODEENV_HOME/$node_env"
 	workon_nodeenv $node_env
 }
 
@@ -48,7 +56,7 @@ workon_nodeenv(){
 		deactivate_node
 	fi
 	
-	source "$NODEENV_HOME$node_env/bin/activate"
+	source "$NODEENV_HOME/$node_env/bin/activate"
 }
 
 # rmnodeenv
@@ -56,7 +64,7 @@ workon_nodeenv(){
 # takes param $env_name, e.g. 'rmnodeenv my_env'
 rmnodeenv(){
 	node_env=$1
-	rm -r "$NODEENV_HOME$node_env"
+	rm -r "$NODEENV_HOME/$node_env"
 }
 
 # cdnodeenv
@@ -64,7 +72,7 @@ rmnodeenv(){
 # takes param $env_name, e.g. 'cdnodeenv my_env'
 cdnodeenv(){
 	node_env=$1
-	cd "$NODEENV_HOME$node_env"
+	cd "$NODEENV_HOME/$node_env"
 }
 
 # lsnodeenv
