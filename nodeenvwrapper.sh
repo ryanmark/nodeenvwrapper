@@ -37,7 +37,7 @@ mknodeenv(){
 	fi
 
 	if [ ! -d "$NODEENV_HOME" ]; then
-    	mkdir $NODEENV_HOME
+    		mkdir $NODEENV_HOME
 	fi
 
 	nodeenv "$NODEENV_HOME/$node_env"
